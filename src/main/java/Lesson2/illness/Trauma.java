@@ -3,7 +3,7 @@ package Lesson2.illness;
 public class Trauma implements Disease{
     @Override
     public void problem() {
-        System.out.println("Мне кажется я сломался!");
+        System.out.println("Пациент: Мне кажется я сломался!");
     }
 
     @Override

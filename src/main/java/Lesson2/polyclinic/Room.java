@@ -1,7 +1,10 @@
 package Lesson2.polyclinic;
 
+import Lesson2.Human;
+
 public interface Room {
-    void heal();
+    void helloDoctor();
     int getRoomNumber();
     String getDoctor();
+    void cure(Human human);
 }

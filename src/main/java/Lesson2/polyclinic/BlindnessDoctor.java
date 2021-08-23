@@ -1,5 +1,6 @@
 package Lesson2.polyclinic;
 
+import Lesson2.Human;
 import org.springframework.stereotype.Component;
 
 @Component("blindness")
@@ -16,7 +17,15 @@ public class BlindnessDoctor implements Room {
     }
 
     @Override
-    public void heal() {
-        System.out.println("Окулист: Я вылечу вашу слепоту!");
+    public void helloDoctor() {
+        System.out.println(doctor + ": Я вылечу вашу слепоту!");
+    }
+
+    @Override
+    public void cure(Human human) {
+        System.out.println("<<---Лечит--->>");
+        human.setDisease(null);
+        System.out.println(doctor + ": Как вы себя чувствуете?");
+        human.feelingAnswer();
     }
 }

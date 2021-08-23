@@ -6,16 +6,20 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 public class Registry {
 
+    void howAreYouFeeling(Human human){
+        System.out.println("Регистратура: Как вы себя чувствуете?");
+        human.feelingAnswer();
+    }
+
     void whatsWrongWithYou(Human human) {
-        System.out.println("Что с Вами случилось?");
+        System.out.println("Регистратура: Что с Вами случилось?");
         human.answerWhatsWrong();
     }
 
-    void goTo(Human human) {
+    Room lookingForADoctor(Human human) {
         ApplicationContext registryContext = new AnnotationConfigApplicationContext(DoctorConfig.class);
         Room room = registryContext.getBean(human.getDisease().toString(), Room.class);
-        System.out.println(String.format("В кабинете № %s, Вас ожидает врач %s", room.getRoomNumber(), room.getDoctor()));
-        System.out.println("Пациент зашел в кабинет №" + room.getRoomNumber() + "\n" + "Врач с порога ему говорит:");
-        room.heal();
+        System.out.println(String.format("Регистратура: В кабинете № %s, Вас ожидает врач %s", room.getRoomNumber(), room.getDoctor()));
+        return room;
     }
 }
