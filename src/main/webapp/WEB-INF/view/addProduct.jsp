@@ -4,6 +4,7 @@
 
 <html>
 <body>
+<a href="menuAction">Back to main menu</a> <br>
 <form:form action="showResult" modelAttribute="product">
     <h2>Add product to base</h2>
     <hr>
