@@ -1,13 +1,12 @@
-package Lesson3.controllers;
+package Lesson4.controllers;
 
-import Lesson3.Launcher;
-import Lesson3.entites.Product;
+import Lesson4.Launcher;
+import Lesson4.entites.Product;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 @Controller
