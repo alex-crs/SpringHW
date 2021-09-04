@@ -1,6 +1,6 @@
 package Lesson4.repositories;
 
-import Lesson4.entites.Product;
+import Lesson4.entities.Product;
 
 import java.util.ArrayList;
 import java.util.List;
