@@ -3,6 +3,7 @@ package Lesson4.controllers;
 import Lesson4.Launcher;
 import Lesson4.entities.Product;
 import Lesson4.repositories.ProductDao;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -39,7 +40,8 @@ public class ProductController {
 
     @RequestMapping("/productList")
     public String showProductList(Model model) {
-        model.addAttribute("products", productBase.getAll());
+//        model.addAttribute("products", productBase.getAll(1,5));
+        model.addAttribute("products", productBase.getAll(0,5));
         return "product-list";
     }
 
