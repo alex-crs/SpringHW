@@ -37,9 +37,10 @@ public class ProductDao {
     public ProductDao() {
     }
 
-    public List<Product> getAll(int page, int size) { //возвращает ограниченный список продуктов
+    public List<Product> getAll(int page, int size, Sort.Direction sort) { //возвращает ограниченный список продуктов
         logger.info("Запрос списка продуктов");
-        Page<Product> list = productRepository.findAll(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "cost")));
+
+        Page<Product> list = productRepository.findAll(PageRequest.of(page, size, Sort.by(sort, "cost")));
         return list.stream().collect(Collectors.toList());
     }
 
@@ -89,6 +90,22 @@ public class ProductDao {
             em.persist(product);
         }
         em.getTransaction().commit();
+    }
+
+    public List<Product> findMax(){
+        Page<Product> list = productRepository.findAll(PageRequest.of(0, 1, Sort.by(Sort.Direction.DESC, "cost")));
+        for (Product l:list){
+            System.out.println(l);
+        }
+        return list.stream().collect(Collectors.toList());
+    }
+
+    public List<Product> findMin(){
+        Page<Product> list = productRepository.findAll(PageRequest.of(0, 1, Sort.by(Sort.Direction.ASC, "cost")));
+        for (Product l:list){
+            System.out.println(l);
+        }
+        return list.stream().collect(Collectors.toList());
     }
 
 }
