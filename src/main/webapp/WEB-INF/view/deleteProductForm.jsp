@@ -7,7 +7,7 @@
     <body>
         <a href="menuAction">Back to main menu</a>
         <form:form action="deleteResult" modelAttribute="product">
-            <h2>Find product by [Product id]:</h2>
+            <h2>Delete product with [Product id]:</h2>
             <hr>
             Product id: <br>
             <form:input path="id" />

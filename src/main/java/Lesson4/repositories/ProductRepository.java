@@ -2,6 +2,7 @@ package Lesson4.repositories;
 
 import Lesson4.entities.Product;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
@@ -14,4 +15,6 @@ public interface ProductRepository extends PagingAndSortingRepository<Product, L
     List<Product> findAll();
 
     Product findById(int id);
+
+    List<Product> findByCostBetween(long minCost, long maxCost, Pageable page);
 }
