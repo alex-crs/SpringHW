@@ -1,4 +1,4 @@
-package Lesson3.entites;
+package Lesson4.entites;
 
 public class Product {
     private int id;

@@ -1,12 +1,12 @@
-package Lesson3.repositories;
+package Lesson4.repositories;
 
-import Lesson3.entites.Product;
+import Lesson4.entites.Product;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.List;
 
 public class ProductBase {
-    ArrayList<Product> productList;
+    List<Product> productList;
 
     public ProductBase() {
         productList = new ArrayList<>();
