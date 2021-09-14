@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+    <div th:replace="up_menu :: text"></div>
+    <a href="menuAction">Back to main menu</a> <br>
+    <h1>Product list:</h1>
+    <form th:action="@{/products/typedProductList}">
+        <hr>
+        <h3>Cost interval:</h3>
+        MinCost: <br>
+        <input type="number" name="minCost" placeholder="0" th:value="${minCost}" />
+        <br>
+        MaxCost: <br>
+        <input type="number" name="maxCost" placeholder="999999999" th:value="${maxCost}" />
+        <br>
+        Sort type:
+        <input type="radio" name="sortType" value="ASC"> Min cost up
+        <input type="radio" name="sortType" value="DESC"> Max cost up
+        <br>
+        Page: <br>
+        <input type="number" name="page" th:value="${page}">
+        <tr th:each="page, iter: ${pages}">
+            <div>
+                <div th:with="page=${iter.count}">
+                    <a href="#" th:text="${page}" th:value="${page}"></a>
+                </div>
+
+        </tr>
+        <br>
+        <input type="submit" value="Submit" />
+        <hr>
+    </form>
+    <tr th:each="product: ${products}">
+        <div>
+            <hr>
+            <td th:text="${product.id}" />
+            <td th:text="${product.title}" />
+            <td th:text="${product.cost}" />
+            <a th:href="@{'/products/delete/' + ${product.id}}" role="button">Remove</a>
+            <hr>
+        </div>
+
+    </tr>
+
+</body>
+
+</html>

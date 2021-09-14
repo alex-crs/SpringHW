@@ -4,9 +4,7 @@ import Lesson4.entities.Product;
 import org.apache.log4j.Logger;
 import org.hibernate.cfg.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.sql2o.Sql2o;
 
@@ -112,10 +110,12 @@ public class ProductDao {
         return list.stream().collect(Collectors.toList());
     }
 
-    public List<Product> findCostBetween(long minCost, long maxCost, Sort.Direction sort, int page) {
-        PageRequest pageRequest = null;
-        List<Product> list = productRepository.findByCostBetween(minCost, maxCost, PageRequest.of(page, 5, Sort.by(sort, "cost")));
-        return list;
+    public Page<Product> findCostBetween(long minCost, long maxCost, Sort.Direction sort, int page) {
+        Pageable sortByCost = PageRequest.of(page, 5, Sort.by(sort, "cost"));
+        Page<Product> pages = productRepository.findByCostBetween(minCost, maxCost, PageRequest.of(page, 5, Sort.by(sort, "cost")));
+//        Page<Product> pages = new PageImpl<Product>(list);
+
+        return pages;
     }
 
     public int loadDataFromFile() {

@@ -3,16 +3,20 @@ package Lesson4.controllers;
 import Lesson4.entities.Product;
 import Lesson4.repositories.ProductDao;
 import org.apache.log4j.Logger;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.Resource;
 import javax.websocket.server.PathParam;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/products")
@@ -29,24 +33,23 @@ public class ProductController {
         return "menuAction";
     }
 
-    @RequestMapping("/addProduct")
+    @RequestMapping(value = "/addProduct", method = RequestMethod.GET)
     public String addProductForm(Model model) {
         Product product = new Product();
         model.addAttribute("product", product);
         return "addProduct";
     }
 
-    @RequestMapping("/showResult")
-    public String addProductResult(@ModelAttribute("product") Product product) {
+    @RequestMapping(value = "/addProduct", method = RequestMethod.POST)
+    public String addProductResult(@ModelAttribute("product") Product product, Model model) {
         productBase.addProduct(product);
-        return "showResult";
+        model.addAttribute("msg", String.format("Product with title %s added to base.", product.getTitle()));
+        return "message";
     }
 
     @RequestMapping("/productList")
     public String showProductList(Model model) {
         model.addAttribute("products", productBase.getAll(0, 5, Sort.Direction.ASC));
-        model.addAttribute("minCost", 0);
-        model.addAttribute("maxCost", 999999999);
         model.addAttribute("page", 0);
         model.addAttribute("sortType", "ASC");
         return "product-list";
@@ -54,23 +57,32 @@ public class ProductController {
 
     @RequestMapping("/typedProductList")
     public String typeShowProductList(Model model, @PathParam("minCost") Long minCost, @PathParam("maxCost") Long maxCost, @PathParam("sortType") String sortType, @PathParam("page") Integer page) {
-        if (minCost == null) {
-            minCost = 0l;
+        long minCostDefault = 0l;
+        long maxCostDefault = 999999999;
+        Page<Product> pages;
+
+        if (minCost != null) {
+            minCostDefault = minCost;
         }
-        if (maxCost == null) {
-            maxCost = Long.MAX_VALUE;
+        if (maxCost != null) {
+            maxCostDefault = maxCost;
         }
         if (page < 0) {
             page = 0;
         }
         if ("DESC".equals(sortType)) {
-            model.addAttribute("products", productBase.findCostBetween(minCost, maxCost, Sort.Direction.DESC, page));
+            pages = productBase.findCostBetween(minCostDefault, maxCostDefault, Sort.Direction.DESC, page);
+            System.out.println(pages.getTotalPages());
+            model.addAttribute("products", pages.stream().collect(Collectors.toList()));
         } else {
-            model.addAttribute("products", productBase.findCostBetween(minCost, maxCost, Sort.Direction.ASC, page));
+            pages = productBase.findCostBetween(minCostDefault, maxCostDefault, Sort.Direction.ASC, page);
+            System.out.println(pages.getTotalPages());
+            model.addAttribute("products", pages.stream().collect(Collectors.toList()));
         }
         model.addAttribute("minCost", minCost);
         model.addAttribute("maxCost", maxCost);
         model.addAttribute("page", page);
+        model.addAttribute("pages", new int[pages.getTotalPages()]);
         return "product-list";
     }
 
@@ -90,7 +102,7 @@ public class ProductController {
                     result.getTitle(),
                     result.getCost()));
         } else {
-            model.addAttribute("mess", "Product with id=" + id + " not found.");
+            model.addAttribute("msg", "Product with id=" + id + " not found.");
         }
         return "message";
 
@@ -137,9 +149,9 @@ public class ProductController {
         logger.info(String.format("Удаляется объект с id [%s]", id));
         int result = productBase.deleteProductById(id);
         if (result <= 0) {
-            model.addAttribute("mess", "Delete error.");
+            model.addAttribute("msg", "Delete error.");
         } else {
-            model.addAttribute("mess", "Delete success.");
+            model.addAttribute("msg", "Delete success.");
         }
         return "message";
     }
@@ -167,9 +179,9 @@ public class ProductController {
     public String loadDataFromFile(Model model) {
         int result = productBase.loadDataFromFile();
         if (result > 0) {
-            model.addAttribute("mess", "Success. Operation complete. Lines read: " + result);
+            model.addAttribute("msg", "Success. Operation complete. Lines read: " + result);
         } else {
-            model.addAttribute("mess", "Critical error. See server log");
+            model.addAttribute("msg", "Critical error. See server log");
         }
         return "message";
     }
