@@ -11,7 +11,7 @@
     <div class="product_blocks">
         <div class="content">
             <div class="searchInfo">
-                <form th:action="@{/products/typedProductList}" name="printletter0">
+                <form th:action="@{/products/typedProductList}">
                     <h3>Cost interval:</h3>
                     MinCost: <br>
                     <input class="input_field search" type="number" name="minCost" placeholder="0" th:value="${minCost}" />
@@ -38,7 +38,7 @@
                         <td class="cell" th:text="${product.id}"></td>
                         <td class="cell" th:text="${product.title}"></td>
                         <td class="cell" th:text="${product.cost}"></td>
-                        <td><a class="cell" th:href="@{'/products/delete/' + ${product.id}}" role="button">Remove</a></td>
+                        <td><a class="cell" th:href="@{/products/delete(id=${product.id})}" role="button">Remove</a></td>
                     </tr>
                 </table>
             </div>
@@ -49,7 +49,8 @@
         <tr th:each="page, iter: ${pages}">
             <div class="page">
                 <div th:with="page=${iter.count}">
-                    <a th:href="@{/products/typedProductList(page=${page}, minCost=${minCost}, maxCost=${maxCost}, sortType=${sortType})}" th:text="${page}">
+                    <a th:href="@{/products/typedProductList(page=${page}, minCost=${minCost},
+                     maxCost=${maxCost}, sortType=${sortType})}" th:text="${page}">
                     </a>
                 </div>
             </div>

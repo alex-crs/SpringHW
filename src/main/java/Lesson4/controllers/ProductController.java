@@ -7,10 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.tags.form.RadioButtonsTag;
 
 import javax.annotation.Resource;
@@ -52,7 +49,7 @@ public class ProductController {
     public String typeShowProductList(Model model, @PathParam("minCost") Long minCost,
                                       @PathParam("maxCost") Long maxCost,
                                       @PathParam("sortType") String sortType,
-                                      @PathParam("page") Integer page) {
+                                      @RequestParam(value = "page", defaultValue = "1") Integer page) {
         long minCostDefault = 0l;
         long maxCostDefault = 999999999;
         Page<Product> pages;
@@ -72,18 +69,12 @@ public class ProductController {
         if (maxCost != null) {
             maxCostDefault = maxCost;
         }
-        if (page == null || page == 0) {
-            page = 0;
-        } else {
-            page--;
-        }
         if (desc) {
-            pages = productBase.findCostBetween(minCostDefault, maxCostDefault, Sort.Direction.DESC, page);
-            model.addAttribute("products", pages.stream().collect(Collectors.toList()));
+            pages = productBase.findCostBetween(minCostDefault, maxCostDefault, Sort.Direction.DESC, --page);
         } else {
-            pages = productBase.findCostBetween(minCostDefault, maxCostDefault, Sort.Direction.ASC, page);
-            model.addAttribute("products", pages.stream().collect(Collectors.toList()));
+            pages = productBase.findCostBetween(minCostDefault, maxCostDefault, Sort.Direction.ASC, --page);
         }
+        model.addAttribute("products", pages.stream().collect(Collectors.toList()));
         model.addAttribute("minCost", minCost);
         model.addAttribute("maxCost", maxCost);
         model.addAttribute("page", page);
@@ -128,8 +119,8 @@ public class ProductController {
         return "deleteProductForm";
     }
 
-    @RequestMapping("/delete/{id}")
-    public String getDeleteMethod(Model model, @PathVariable(value = "id") Integer id) {
+    @RequestMapping("/delete")
+    public String getDeleteMethod(Model model, @PathParam("id") Integer id) {
         logger.info(String.format("Удаляется объект с id [%s]", id));
         int result = productBase.deleteProductById(id);
         if (result <= 0) {
@@ -138,12 +129,6 @@ public class ProductController {
             model.addAttribute("msg", "Delete success.");
         }
         return "message";
-    }
-
-    @RequestMapping("/deleteResult")
-    public String showDeleteResult(@ModelAttribute("product") Product product, Model model) {
-        logger.info(String.format("Удаляется объект с именем [%s]", product.getTitle()));
-        return "redirect:/products/delete/" + product.getId();
     }
 
     @RequestMapping("/updateProduct")
