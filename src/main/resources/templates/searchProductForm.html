@@ -1,4 +1,6 @@
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 
 <head>
     <link type="text/css" rel="stylesheet" th:href="@{/styles/css/style.css}" />
@@ -8,12 +10,10 @@
     <div th:replace="up_menu :: main_menu"></div>
     <div class="container">
         <div class="form">
-            <form th:action="@{/products/addProduct}" th:object="${product}" method="POST">
-                <h2>Add product to base</h2>
-                <p>Product name:</p>
-                <input type="text" th:field="*{title}" />
-                <p>Cost:</p>
-                <input type="text" th:field="*{cost}" />
+            <form th:action="@{/products/searchProductForm}" th:object="${product}" method="POST">
+                <h2>Find product by ID:</h2>
+                Product id:
+                <input type="text" th:field="*{id}" />
                 <input type="submit" value="Submit" />
             </form>
         </div>

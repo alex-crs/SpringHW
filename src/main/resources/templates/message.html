@@ -1,11 +1,23 @@
-<html lang="en" xmlns:th="http://www.thymeleaf.org"></html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<html>
+</html>
+
+<head>
+    <link type="text/css" rel="stylesheet" th:href="@{/styles/css/style.css}" />
+</head>
 
 <body>
-    <h2><p th:text="${msg}"></p></h2>
-    <a href="../productList">Show product list</a><br>
-    <a href="../menuAction">Back to main menu</a>
+    <div th:replace="up_menu :: main_menu"></div>
+    <div class="container">
+        <div class="form msg">
+            <h2>
+                <p th:text="${msg}"></p>
+            </h2>
+        </div>
+
+    </div>
+
+    <div th:replace="foot_menu :: footer"></div>
 </body>
 
 </html>

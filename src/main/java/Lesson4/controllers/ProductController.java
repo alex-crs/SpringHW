@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.tags.form.RadioButtonsTag;
 
 import javax.annotation.Resource;
 import javax.websocket.server.PathParam;
@@ -47,16 +48,11 @@ public class ProductController {
         return "message";
     }
 
-    @RequestMapping("/productList")
-    public String showProductList(Model model) {
-        model.addAttribute("products", productBase.getAll(0, 5, Sort.Direction.ASC));
-        model.addAttribute("page", 0);
-        model.addAttribute("sortType", "ASC");
-        return "product-list";
-    }
-
     @RequestMapping("/typedProductList")
-    public String typeShowProductList(Model model, @PathParam("minCost") Long minCost, @PathParam("maxCost") Long maxCost, @PathParam("sortType") String sortType, @PathParam("page") Integer page) {
+    public String typeShowProductList(Model model, @PathParam("minCost") Long minCost,
+                                      @PathParam("maxCost") Long maxCost,
+                                      @PathParam("sortType") String sortType,
+                                      @PathParam("page") Integer page) {
         long minCostDefault = 0l;
         long maxCostDefault = 999999999;
         Page<Product> pages;
@@ -67,21 +63,22 @@ public class ProductController {
         if (maxCost != null) {
             maxCostDefault = maxCost;
         }
-        if (page < 0) {
+        if (page == null || page == 0) {
             page = 0;
+        } else {
+            page--;
         }
         if ("DESC".equals(sortType)) {
             pages = productBase.findCostBetween(minCostDefault, maxCostDefault, Sort.Direction.DESC, page);
-            System.out.println(pages.getTotalPages());
             model.addAttribute("products", pages.stream().collect(Collectors.toList()));
         } else {
             pages = productBase.findCostBetween(minCostDefault, maxCostDefault, Sort.Direction.ASC, page);
-            System.out.println(pages.getTotalPages());
             model.addAttribute("products", pages.stream().collect(Collectors.toList()));
         }
         model.addAttribute("minCost", minCost);
         model.addAttribute("maxCost", maxCost);
         model.addAttribute("page", page);
+//        model.addAttribute("sortType", "DESC");
         model.addAttribute("pages", new int[pages.getTotalPages()]);
         return "product-list";
     }
@@ -93,11 +90,11 @@ public class ProductController {
         return "searchProductForm";
     }
 
-    @RequestMapping("/search/{id}")
-    public String getFindMethod(Model model, @PathVariable(value = "id") Integer id) {
+    @RequestMapping(value = "/searchProductForm", method = RequestMethod.POST)
+    public String getFindMethod(Model model, @PathParam("id") Integer id) {
         Product result = productBase.getProductById(id);
         if (result != null) {
-            model.addAttribute("mess", String.format("Product with id=[%s] found:<br><hr> %s, cost = %s<hr>",
+            model.addAttribute("msg", String.format("Product with id=[%s] found: %s, cost = %s",
                     result.getId(),
                     result.getTitle(),
                     result.getCost()));
@@ -111,30 +108,6 @@ public class ProductController {
     @RequestMapping("/searchResult")
     public String showSearchResult(@ModelAttribute("product") Product product, Model model) {
         return "redirect:search/" + product.getId();
-    }
-
-    @RequestMapping("/maxResult")
-    public String searchFilterMaxCost(Model model) {
-        model.addAttribute("products", productBase.findMax());
-        model.addAttribute("action", "Product with Max cost:");
-        return "extResult";
-    }
-
-    @RequestMapping("/minResult")
-    public String searchFilterMinCost(Model model) {
-        model.addAttribute("products", productBase.findMin());
-        model.addAttribute("action", "Product with Min cost:");
-        return "extResult";
-    }
-
-    @RequestMapping("/maxAndMinCost")
-    public String searchFilterMaxAndMinCost(Model model) {
-        List<Product> maxList = productBase.findMax();
-        List<Product> minList = productBase.findMin();
-        minList.addAll(maxList);
-        model.addAttribute("products", minList);
-        model.addAttribute("action", "Product with Max and Min costs:");
-        return "extResult";
     }
 
     @RequestMapping("/deleteProductForm")
@@ -169,10 +142,21 @@ public class ProductController {
         return "updateProduct";
     }
 
-    @RequestMapping("/updateResult")
-    public String updateResult(@ModelAttribute("product") Product product) {
-        productBase.addOrUpdate(product);
-        return "updateResult";
+    @RequestMapping(value = "/updateProduct", method = RequestMethod.POST)
+    public String updateResult(@ModelAttribute("product") Product product, Model model) {
+        int result = productBase.addOrUpdate(product);
+        if (result == 1) {
+            model.addAttribute("msg", String.format("Product with: %s, cost = %s updated",
+                    product.getTitle(),
+                    product.getCost()));
+        } else if (result == 2) {
+            model.addAttribute("msg", String.format("Product with: %s, cost = %s updated",
+                    product.getTitle(),
+                    product.getCost()));
+        } else {
+            model.addAttribute("msg", "Error.");
+        }
+        return "message";
     }
 
     @RequestMapping("/loadFromFile")
