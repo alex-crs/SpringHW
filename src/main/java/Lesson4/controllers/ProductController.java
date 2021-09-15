@@ -128,8 +128,8 @@ public class ProductController {
         return "deleteProductForm";
     }
 
-    @RequestMapping("/delete/{id}")
-    public String getDeleteMethod(Model model, @PathVariable(value = "id") Integer id) {
+    @RequestMapping("/delete")
+    public String getDeleteMethod(Model model, @PathParam("id") Integer id) {
         logger.info(String.format("Удаляется объект с id [%s]", id));
         int result = productBase.deleteProductById(id);
         if (result <= 0) {
