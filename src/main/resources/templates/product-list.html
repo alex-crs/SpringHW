@@ -18,8 +18,8 @@
                     <br> MaxCost: <br>
                     <input type="number" name="maxCost" placeholder="999999999" th:value="${maxCost}" />
                     <br> Sort type:
-                    <input type="radio" name="sortType" th:value="ASC" th:field="*{sortType}"> Min cost up
-                    <input type="radio" name="sortType" th:value="DESC" th:field="*{sortType}" checked> Max cost up
+                    <input type="radio" name="sortType" th:value="ASC" th:checked="${ASC}"> Min cost up
+                    <input type="radio" name="sortType" th:value="DESC" th:checked="${DESC}"> Max cost up
 
                     <input type="submit" value="Submit" />
                 </form>
@@ -49,7 +49,7 @@
         <tr th:each="page, iter: ${pages}">
             <div class="page">
                 <div th:with="page=${iter.count}">
-                    <a th:href="@{/products/typedProductList(page=${page}, minCost=${minCost}, maxCost=${maxCost})}" th:text="${page}">
+                    <a th:href="@{/products/typedProductList(page=${page}, minCost=${minCost}, maxCost=${maxCost}, sortType=${sortType})}" th:text="${page}">
                     </a>
                 </div>
             </div>

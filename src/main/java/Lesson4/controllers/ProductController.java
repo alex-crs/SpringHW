@@ -56,6 +56,15 @@ public class ProductController {
         long minCostDefault = 0l;
         long maxCostDefault = 999999999;
         Page<Product> pages;
+        boolean asc = false;
+        boolean desc = false;
+
+        if ("ASC".equals(sortType)) {
+            asc = true;
+        }
+        if ("DESC".equals(sortType)) {
+            desc = true;
+        }
 
         if (minCost != null) {
             minCostDefault = minCost;
@@ -68,7 +77,7 @@ public class ProductController {
         } else {
             page--;
         }
-        if ("DESC".equals(sortType)) {
+        if (desc) {
             pages = productBase.findCostBetween(minCostDefault, maxCostDefault, Sort.Direction.DESC, page);
             model.addAttribute("products", pages.stream().collect(Collectors.toList()));
         } else {
@@ -78,7 +87,9 @@ public class ProductController {
         model.addAttribute("minCost", minCost);
         model.addAttribute("maxCost", maxCost);
         model.addAttribute("page", page);
-//        model.addAttribute("sortType", "DESC");
+        model.addAttribute("ASC", asc);
+        model.addAttribute("DESC", desc);
+        model.addAttribute("sortType",sortType);
         model.addAttribute("pages", new int[pages.getTotalPages()]);
         return "product-list";
     }
