@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link type="text/css" rel="stylesheet" th:href="@{/styles/css/style.css}" />
+</head>
+
+<body>
+    <div th:replace="up_menu :: main_menu"></div>
+    <h1 class="title">Product list:</h1>
+    <div class="product_blocks">
+        <div class="content">
+            <div class="searchInfo">
+                <form th:action="@{/products/typedProductList}">
+                    <h3>Cost interval:</h3>
+                    MinCost: <br>
+                    <input class="input_field search" type="number" name="minCost" placeholder="0" th:value="${minCost}" />
+                    <br> MaxCost: <br>
+                    <input type="number" name="maxCost" placeholder="999999999" th:value="${maxCost}" />
+                    <br> Sort type:
+                    <input type="radio" name="sortType" th:value="ASC" th:checked="${ASC}"> Min cost up
+                    <input type="radio" name="sortType" th:value="DESC" th:checked="${DESC}"> Max cost up
+
+                    <input type="submit" value="Submit" />
+                </form>
+            </div>
+
+            <div class="list_item">
+                <table class="items">
+                    <tr class="product_card">
+                        <td class="cell">Product ID</td>
+                        <td class="cell">Title</td>
+                        <td class="cell">Cost</td>
+                        <td class="cell">Action</td>
+                    </tr>
+                    <tr class="product_card" th:each="product: ${products}">
+
+                        <td class="cell" th:text="${product.id}"></td>
+                        <td class="cell" th:text="${product.title}"></td>
+                        <td class="cell" th:text="${product.cost}"></td>
+                        <td><a class="cell" th:href="@{/products/delete(id=${product.id})}" role="button">Remove</a></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="pages">
+        <p>Page:</p>
+        <tr th:each="page, iter: ${pages}">
+            <div class="page">
+                <div th:with="page=${iter.count}">
+                    <a th:href="@{/products/typedProductList(page=${page}, minCost=${minCost},
+                     maxCost=${maxCost}, sortType=${sortType})}" th:text="${page}">
+                    </a>
+                </div>
+            </div>
+
+        </tr>
+    </div>
+    <div th:replace="foot_menu :: footer"></div>
+</body>
+
+</html>

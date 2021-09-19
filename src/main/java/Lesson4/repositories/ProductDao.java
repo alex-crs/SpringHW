@@ -4,14 +4,13 @@ import Lesson4.entities.Product;
 import org.apache.log4j.Logger;
 import org.hibernate.cfg.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.sql2o.Sql2o;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 import java.io.*;
 
@@ -39,13 +38,6 @@ public class ProductDao {
     }
 
     public ProductDao() {
-    }
-
-    public List<Product> getAll(int page, int size, Sort.Direction sort) { //возвращает ограниченный список продуктов
-        logger.info("Запрос списка продуктов");
-
-        Page<Product> list = productRepository.findAll(PageRequest.of(page, size, Sort.by(sort, "cost")));
-        return list.stream().collect(Collectors.toList());
     }
 
     public Product getProductById(int id) {
@@ -82,42 +74,34 @@ public class ProductDao {
         }
     }
 
-    public void addOrUpdate(Product product) {
+    public int addOrUpdate(Product product) {
         logger.info("Изменение продукта c ID=" + product.getId() + " " + product.getTitle());
+        Product searchResult = null;
         em.getTransaction().begin();
-        Product searchResult = em.createNamedQuery("Product.getByTitle", Product.class)
-                .setParameter("title", product.getTitle()).getSingleResult();
+        try {
+            searchResult = em.createNamedQuery("Product.getByTitle", Product.class)
+                    .setParameter("title", product.getTitle()).getSingleResult();
+        } catch (NoResultException e) {
+            logger.info("Продукт не обнаружен");
+        }
         if (searchResult != null) {
             searchResult.setTitle(product.getTitle());
             searchResult.setCost(product.getCost());
+            em.getTransaction().commit();
+            return 1;
         } else {
             em.persist(product);
         }
         em.getTransaction().commit();
+        return 2;
     }
 
-    public List<Product> findMax() {
-        Page<Product> list = productRepository.findAll(PageRequest.of(0, 1, Sort.by(Sort.Direction.DESC, "cost")));
-        for (Product l : list) {
-            System.out.println(l);
-        }
-        return list.stream().collect(Collectors.toList());
+    public Page<Product> findCostBetween(long minCost, long maxCost, Sort.Direction sort, int page) {
+        Page<Product> pages = productRepository.findByCostBetween(minCost, maxCost, PageRequest.of(page, 10, Sort.by(sort, "cost")));
+        return pages;
     }
 
-    public List<Product> findMin() {
-        Page<Product> list = productRepository.findAll(PageRequest.of(0, 1, Sort.by(Sort.Direction.ASC, "cost")));
-        for (Product l : list) {
-            System.out.println(l);
-        }
-        return list.stream().collect(Collectors.toList());
-    }
-
-    public List<Product> findCostBetween(long minCost, long maxCost, Sort.Direction sort, int page) {
-        PageRequest pageRequest = null;
-        List<Product> list = productRepository.findByCostBetween(minCost, maxCost, PageRequest.of(page, 5, Sort.by(sort, "cost")));
-        return list;
-    }
-
+    //загружает содержимое текстового файла в базу
     public int loadDataFromFile() {
         File file = new File("update.txt");
         Sql2o sql2o = new Sql2o("jdbc:sqlite:base.db", null, null);
