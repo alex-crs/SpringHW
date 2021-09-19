@@ -15,7 +15,11 @@ import java.util.Optional;
 public interface ProductRepository extends PagingAndSortingRepository<Product, Long> {
     List<Product> findAll();
 
-    Product findById(int id);
+    Optional<Product> findById(int id);
+
+    int deleteById(int id);
 
     Page<Product> findByCostBetween(long minCost, long maxCost, Pageable pageable);
+
+    Product save(Product product);
 }

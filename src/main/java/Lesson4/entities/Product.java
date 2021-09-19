@@ -1,5 +1,9 @@
 package Lesson4.entities;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+
 import javax.persistence.*;
 
 @Entity
@@ -9,6 +13,8 @@ import javax.persistence.*;
         @NamedQuery(name = "Product.findById", query = "SELECT p FROM Product p WHERE p.id = :id"),
         @NamedQuery(name = "Product.getByTitle", query = "SELECT p FROM Product p WHERE p.title = :title")
 })
+@NoArgsConstructor
+@Data
 public class Product {
     @Id
     @Column(name = "id")
@@ -16,47 +22,11 @@ public class Product {
     @Basic
     private int id;
 
+    @NonNull
     @Column(name = "title")
     private String title;
 
+    @NonNull
     @Column(name = "cost")
     private long cost;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public long getCost() {
-        return cost;
-    }
-
-    public void setCost(long cost) {
-        this.cost = cost;
-    }
-
-    public Product() {
-    }
-
-    public Product(int id, String title, long cost) {
-        this.id = id;
-        this.title = title;
-        this.cost = cost;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("Product id=[%s], title = [%s], cost = [%s]", id, title, cost);
-    }
 }
