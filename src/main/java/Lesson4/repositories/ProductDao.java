@@ -8,12 +8,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.sql2o.Sql2o;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.Transactional;
+import java.io.*;
+
+import org.sql2o.Connection;
+
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service("ProductDao")
@@ -92,20 +96,60 @@ public class ProductDao {
         em.getTransaction().commit();
     }
 
-    public List<Product> findMax(){
+    public List<Product> findMax() {
         Page<Product> list = productRepository.findAll(PageRequest.of(0, 1, Sort.by(Sort.Direction.DESC, "cost")));
-        for (Product l:list){
+        for (Product l : list) {
             System.out.println(l);
         }
         return list.stream().collect(Collectors.toList());
     }
 
-    public List<Product> findMin(){
+    public List<Product> findMin() {
         Page<Product> list = productRepository.findAll(PageRequest.of(0, 1, Sort.by(Sort.Direction.ASC, "cost")));
-        for (Product l:list){
+        for (Product l : list) {
             System.out.println(l);
         }
         return list.stream().collect(Collectors.toList());
     }
 
+    public List<Product> findCostBetween(long minCost, long maxCost, Sort.Direction sort, int page) {
+        PageRequest pageRequest = null;
+        List<Product> list = productRepository.findByCostBetween(minCost, maxCost, PageRequest.of(page, 5, Sort.by(sort, "cost")));
+        return list;
+    }
+
+    public int loadDataFromFile() {
+        File file = new File("update.txt");
+        Sql2o sql2o = new Sql2o("jdbc:sqlite:base.db", null, null);
+        logger.info(String.format("Запущен метод добавления данных из файла [%s] в базу данных.", file.getName()));
+        String insertQuery = "INSERT INTO score(id, score) VALUES (:idParam, :scoreParam)";
+        int stringCount = 0;
+        try (FileInputStream fis = new FileInputStream(file);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
+             Connection sqlCon = sql2o.open()) {
+            //Читаем заголовок документа
+            String[] head = reader.readLine().split(" ");
+            stringCount++;
+            if ("id".equals(head[0]) && "score".equals(head[1]) && head.length == 2) {
+                while (reader.ready()) {
+                    String[] line = reader.readLine().split(" ");
+                    sqlCon.createQuery(insertQuery)
+                            .addParameter("idParam", line[0])
+                            .addParameter("scoreParam", line[1])
+                            .executeUpdate();
+                    stringCount++;
+                }
+                logger.info(String.format("Успешно! Прочитано %s строк.", stringCount));
+            } else {
+                System.out.println("Неверный формат данных.");
+            }
+        } catch (FileNotFoundException e) {
+            logger.error(String.format("Файл [%s] не найден!", file.getName()));
+            return -1;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return -1;
+        }
+        return stringCount;
+    }
 }

@@ -11,7 +11,8 @@
     <a href="updateProduct">Update product</a><br>
     <a href="maxResult">Search Max Cost</a><br>
     <a href="minResult">Search Min Cost</a><br>
-    <a href="maxAndMinCost">Search Max and Min Cost</a>
+    <a href="maxAndMinCost">Search Max and Min Cost</a><br>
+    <a href="loadFromFile">Load data from file</a>
 </body>
 
 </html>
