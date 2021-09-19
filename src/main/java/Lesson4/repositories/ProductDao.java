@@ -17,6 +17,7 @@ import java.io.*;
 import org.sql2o.Connection;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service("ProductDao")
@@ -40,9 +41,9 @@ public class ProductDao {
     public ProductDao() {
     }
 
-    public Product getProductById(int id) {
+    public Optional<Product> getProductById(int id) {
         logger.info("Запрос продукта c ID=" + id);
-        Product product = null;
+        Optional<Product> product = null;
         try {
             product = productRepository.findById(id);
         } catch (Exception e) {
@@ -74,6 +75,10 @@ public class ProductDao {
         }
     }
 
+    public int deleteById(int id){
+        return productRepository.deleteById(id);
+    }
+
     public int addOrUpdate(Product product) {
         logger.info("Изменение продукта c ID=" + product.getId() + " " + product.getTitle());
         Product searchResult = null;
@@ -88,12 +93,12 @@ public class ProductDao {
             searchResult.setTitle(product.getTitle());
             searchResult.setCost(product.getCost());
             em.getTransaction().commit();
-            return 1;
+            return 0;
         } else {
             em.persist(product);
         }
         em.getTransaction().commit();
-        return 2;
+        return 1;
     }
 
     public Page<Product> findCostBetween(long minCost, long maxCost, Sort.Direction sort, int page) {

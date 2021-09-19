@@ -2,6 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link type="text/css" rel="stylesheet" th:href="@{/styles/css/style.css}" />
 </head>
 
@@ -26,20 +28,23 @@
             </div>
 
             <div class="list_item">
-                <table class="items">
-                    <tr class="product_card">
-                        <td class="cell">Product ID</td>
-                        <td class="cell">Title</td>
-                        <td class="cell">Cost</td>
-                        <td class="cell">Action</td>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Actions</th>
                     </tr>
-                    <tr class="product_card" th:each="product: ${products}">
-
-                        <td class="cell" th:text="${product.id}"></td>
-                        <td class="cell" th:text="${product.title}"></td>
-                        <td class="cell" th:text="${product.cost}"></td>
-                        <td><a class="cell" th:href="@{/products/delete(id=${product.id})}" role="button">Remove</a></td>
+                    </thead>
+                    <tbody>
+                    <tr th:each="product: ${products}">
+                        <td th:text="${product.id}"></td>
+                        <td th:text="${product.title}"></td>
+                        <td th:text="${product.cost}"></td>
+                        <td><a class="btn btn-danger" th:href="@{/products/delete(id=${product.id})}" role="button">Remove</a></td>
                     </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -49,8 +54,7 @@
         <tr th:each="page, iter: ${pages}">
             <div class="page">
                 <div th:with="page=${iter.count}">
-                    <a th:href="@{/products/typedProductList(page=${page}, minCost=${minCost},
-                     maxCost=${maxCost}, sortType=${sortType})}" th:text="${page}">
+                    <a th:href="@{/products/typedProductList(page=${page}, minCost=${minCost}, maxCost=${maxCost}, sortType=${sortType})}" th:text="${page}">
                     </a>
                 </div>
             </div>

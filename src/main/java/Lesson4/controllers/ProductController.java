@@ -2,6 +2,7 @@ package Lesson4.controllers;
 
 import Lesson4.entities.Product;
 import Lesson4.repositories.ProductDao;
+import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -14,9 +15,11 @@ import javax.annotation.Resource;
 import javax.websocket.server.PathParam;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/products")
 public class ProductController {
 
@@ -94,7 +97,7 @@ public class ProductController {
 
     @RequestMapping(value = "/searchProductForm", method = RequestMethod.POST)
     public String getFindMethod(Model model, @PathParam("id") Integer id) {
-        Product result = productBase.getProductById(id);
+        Product result = productBase.getProductById(id).get();
         if (result != null) {
             model.addAttribute("msg", String.format("Product with id=[%s] found: %s, cost = %s",
                     result.getId(),
@@ -104,12 +107,6 @@ public class ProductController {
             model.addAttribute("msg", "Product with id=" + id + " not found.");
         }
         return "message";
-
-    }
-
-    @RequestMapping("/searchResult")
-    public String showSearchResult(@ModelAttribute("product") Product product, Model model) {
-        return "redirect:search/" + product.getId();
     }
 
     @RequestMapping("/deleteProductForm")
@@ -129,6 +126,12 @@ public class ProductController {
             model.addAttribute("msg", "Delete success.");
         }
         return "message";
+    }
+
+    @RequestMapping("/deleteResult")
+    public String showDeleteResult(@ModelAttribute("product") Product product, Model model) {
+        logger.info(String.format("Удаляется объект с именем [%s]", product.getTitle()));
+        return "redirect:/products/delete/" + product.getId();
     }
 
     @RequestMapping("/updateProduct")
