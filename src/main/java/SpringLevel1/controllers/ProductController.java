@@ -1,7 +1,7 @@
-package Lesson4.controllers;
+package SpringLevel1.controllers;
 
-import Lesson4.entities.Product;
-import Lesson4.repositories.ProductDao;
+import SpringLevel1.entities.Product;
+import SpringLevel1.repositories.ProductDao;
 import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
 import org.springframework.data.domain.Page;
@@ -9,13 +9,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.tags.form.RadioButtonsTag;
 
 import javax.annotation.Resource;
 import javax.websocket.server.PathParam;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller

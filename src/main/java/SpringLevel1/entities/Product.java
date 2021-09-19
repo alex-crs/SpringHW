@@ -1,4 +1,4 @@
-package Lesson4.entities;
+package SpringLevel1.entities;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,10 +1,8 @@
-package Lesson4.repositories;
+package SpringLevel1.repositories;
 
-import Lesson4.entities.Product;
+import SpringLevel1.entities.Product;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 

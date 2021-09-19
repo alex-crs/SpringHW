@@ -1,16 +1,15 @@
-package Lesson4.controllers;
+package SpringLevel1.controllers;
 
-import Lesson4.entities.Product;
-import Lesson4.entities.SearchResult;
-import Lesson4.errors.Errors;
-import Lesson4.errors.ResourceNotFoundException;
-import Lesson4.repositories.ProductDao;
+import SpringLevel1.entities.Product;
+import SpringLevel1.entities.SearchResult;
+import SpringLevel1.errors.Errors;
+import SpringLevel1.errors.ResourceNotFoundException;
+import SpringLevel1.repositories.ProductDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

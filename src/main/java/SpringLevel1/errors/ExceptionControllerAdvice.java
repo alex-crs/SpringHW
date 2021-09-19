@@ -1,4 +1,4 @@
-package Lesson4.errors;
+package SpringLevel1.errors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

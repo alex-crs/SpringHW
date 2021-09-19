@@ -1,4 +1,4 @@
-package Lesson4.entities;
+package SpringLevel1.entities;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -6,7 +6,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Entity;
 import java.util.List;
 
 @Component

@@ -11,6 +11,6 @@
         <property name="show_sql">true</property>
         <property name="hbm2ddl.auto">none</property>
         <property name="current_session_context_class">thread</property>
-        <mapping class="Lesson4.entities.Product"/>
+        <mapping class="SpringLevel1.entities.Product"/>
     </session-factory>
 </hibernate-configuration>

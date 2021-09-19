@@ -1,7 +1,6 @@
-package Lesson4.errors;
+package SpringLevel1.errors;
 
 import lombok.Data;
-import org.springframework.stereotype.Component;
 
 import java.util.*;
 

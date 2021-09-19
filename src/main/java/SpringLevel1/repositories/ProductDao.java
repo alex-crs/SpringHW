@@ -1,6 +1,6 @@
-package Lesson4.repositories;
+package SpringLevel1.repositories;
 
-import Lesson4.entities.Product;
+import SpringLevel1.entities.Product;
 import org.apache.log4j.Logger;
 import org.hibernate.cfg.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +16,7 @@ import java.io.*;
 
 import org.sql2o.Connection;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service("ProductDao")
 @Transactional
