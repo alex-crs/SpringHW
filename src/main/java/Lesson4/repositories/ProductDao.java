@@ -3,42 +3,52 @@ package Lesson4.repositories;
 import Lesson4.entities.Product;
 import org.apache.log4j.Logger;
 import org.hibernate.cfg.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service("ProductDao")
 @Transactional
 public class ProductDao {
     Logger logger = Logger.getLogger(ProductDao.class);
-    EntityManagerFactory factory = new Configuration()
+    EntityManagerFactory factory = new Configuration() //удалить
             .configure("hibernate.cfg.xml")
             .addAnnotatedClass(Product.class)
             .buildSessionFactory();
     ;
-    EntityManager em = factory.createEntityManager();
+    EntityManager em = factory.createEntityManager(); //удалить
+
+    private ProductRepository productRepository;
+
+    @Autowired
+    public void setProductRepository(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
     public ProductDao() {
     }
 
-    public List<Product> getAll() {
+    public List<Product> getAll(int page, int size, Sort.Direction sort) { //возвращает ограниченный список продуктов
         logger.info("Запрос списка продуктов");
-        em.getTransaction().begin();
-        List<Product> list = em.createNamedQuery("Product.findAll", Product.class).getResultList();
-        em.getTransaction().commit();
-        return list;
+
+        Page<Product> list = productRepository.findAll(PageRequest.of(page, size, Sort.by(sort, "cost")));
+        return list.stream().collect(Collectors.toList());
     }
 
     public Product getProductById(int id) {
         logger.info("Запрос продукта c ID=" + id);
         Product product = null;
         try {
-            product = em.createNamedQuery("Product.findById", Product.class)
-                    .setParameter("id", id)
-                    .getSingleResult();
+            product = productRepository.findById(id);
         } catch (Exception e) {
             logger.info("Продукт не найден");
         }
@@ -80,6 +90,22 @@ public class ProductDao {
             em.persist(product);
         }
         em.getTransaction().commit();
+    }
+
+    public List<Product> findMax(){
+        Page<Product> list = productRepository.findAll(PageRequest.of(0, 1, Sort.by(Sort.Direction.DESC, "cost")));
+        for (Product l:list){
+            System.out.println(l);
+        }
+        return list.stream().collect(Collectors.toList());
+    }
+
+    public List<Product> findMin(){
+        Page<Product> list = productRepository.findAll(PageRequest.of(0, 1, Sort.by(Sort.Direction.ASC, "cost")));
+        for (Product l:list){
+            System.out.println(l);
+        }
+        return list.stream().collect(Collectors.toList());
     }
 
 }
