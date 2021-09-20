@@ -1,6 +1,7 @@
 package SpringLevel1.repositories;
 
 import SpringLevel1.entities.Product;
+import lombok.NoArgsConstructor;
 import org.apache.log4j.Logger;
 import org.hibernate.cfg.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import java.util.Optional;
 
 @Service("ProductDao")
 @Transactional
+@NoArgsConstructor
 public class ProductDao {
     Logger logger = Logger.getLogger(ProductDao.class);
     EntityManagerFactory factory = new Configuration() //удалить
@@ -34,9 +36,6 @@ public class ProductDao {
     @Autowired
     public void setProductRepository(ProductRepository productRepository) {
         this.productRepository = productRepository;
-    }
-
-    public ProductDao() {
     }
 
     public Optional<Product> getProductById(int id) {

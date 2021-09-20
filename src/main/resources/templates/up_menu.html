@@ -10,20 +10,26 @@
 
 </body>
 <div th:fragment="main_menu">
-    <div class="container">
-        <div class="main_menu">
-            <a class="menu_element" href="menuAction">MAIN</a><br>
-            <a class="menu_element" href="typedProductList?minCost=&maxCost=">PRODUCT LIST</a><br>
-            <a class="menu_element" href="addProduct">ADD</a>
-            <a class="menu_element" href="searchProductForm">FIND</a>
-            <a class="menu_element" href="updateProduct">UPDATE</a>
-            <a class="menu_element" href="deleteProductForm">DELETE</a>
+
+
+    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+        <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+            <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
+
+        </a>
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+            <li><a href="menuAction" class="nav-link px-2 link-secondary">MAIN</a></li>
+            <li><a href="typedProductList?minCost=&maxCost=" class="nav-link px-2 link-dark">PRODUCT LIST</a></li>
+            <li><a href="addProduct" class="nav-link px-2 link-dark">ADD</a></li>
+            <li><a href="searchProductForm" class="nav-link px-2 link-dark">FIND</a></li>
+            <li><a href="updateProduct" class="nav-link px-2 link-dark">UPDATE</a></li>
+            <li><a href="deleteProductForm" class="nav-link px-2 link-dark">DELETE</a></li>
+        </ul>
+
+        <div class="col-md-3 text-end">
+            <button type="button" class="btn btn-outline-primary me-2">Login</button>
         </div>
-    </div>
+    </header>
 </div>
-
-
-
-
 
 </html>

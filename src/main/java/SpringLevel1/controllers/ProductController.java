@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.websocket.server.PathParam;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Controller
@@ -93,12 +94,13 @@ public class ProductController {
 
     @RequestMapping(value = "/searchProductForm", method = RequestMethod.POST)
     public String getFindMethod(Model model, @PathParam("id") Integer id) {
-        Product result = productBase.getProductById(id).get();
-        if (result != null) {
+        Optional<Product> result = productBase.getProductById(id);
+        if (result.isPresent()) {
+            Product product = result.get();
             model.addAttribute("msg", String.format("Product with id=[%s] found: %s, cost = %s",
-                    result.getId(),
-                    result.getTitle(),
-                    result.getCost()));
+                    product.getId(),
+                    product.getTitle(),
+                    product.getCost()));
         } else {
             model.addAttribute("msg", "Product with id=" + id + " not found.");
         }
