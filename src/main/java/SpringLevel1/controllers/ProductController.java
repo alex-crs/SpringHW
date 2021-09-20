@@ -140,11 +140,11 @@ public class ProductController {
     @RequestMapping(value = "/updateProduct", method = RequestMethod.POST)
     public String updateResult(@ModelAttribute("product") Product product, Model model) {
         int result = productBase.addOrUpdate(product);
-        if (result == 1) {
+        if (result == 0) {
             model.addAttribute("msg", String.format("Product with: %s, cost = %s updated",
                     product.getTitle(),
                     product.getCost()));
-        } else if (result == 2) {
+        } else if (result == 1) {
             model.addAttribute("msg", String.format("Product with: %s, cost = %s updated",
                     product.getTitle(),
                     product.getCost()));
