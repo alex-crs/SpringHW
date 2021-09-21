@@ -29,8 +29,8 @@
         </ul>
 
         <div class="col-md-3 text-end">
-            <a class="login" href="/login">LOGIN</a>
-            <a class="login" href="/logout">LOGOUT</a>
+            <a class="login" sec:authorize="!isAuthenticated()" href="/login">LOGIN</a>
+            <a class="login" sec:authorize="isAuthenticated()" href="/logout">LOGOUT</a>
         </div>
     </header>
 </div>

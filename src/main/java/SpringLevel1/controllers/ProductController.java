@@ -141,7 +141,7 @@ public class ProductController {
     @RequestMapping("/deleteResult")
     public String showDeleteResult(@ModelAttribute("product") Product product, Model model) {
         logger.info(String.format("Удаляется объект с именем [%s]", product.getTitle()));
-        return "redirect:/products/delete/" + product.getId();
+        return "redirect:/delete/" + product.getId();
     }
 
     @Secured({"ROLE_ADMIN"})

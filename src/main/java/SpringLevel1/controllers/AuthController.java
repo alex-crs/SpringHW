@@ -18,7 +18,6 @@ public class AuthController {
     @GetMapping("/logout")
     public String logout(HttpSession session, Model model){
         session.invalidate();
-        model.addAttribute("msg","До скорых встреч!");
-        return "message";
+        return "redirect:/menuAction";
     }
 }
