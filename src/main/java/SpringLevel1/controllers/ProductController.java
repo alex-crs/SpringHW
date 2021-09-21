@@ -1,11 +1,12 @@
 package SpringLevel1.controllers;
 
 import SpringLevel1.entities.Product;
-import SpringLevel1.repositories.ProductDao;
+import SpringLevel1.service.ProductDao;
 import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,6 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/products")
 public class ProductController {
 
     Logger logger = Logger.getLogger(ProductController.class);
@@ -31,6 +31,14 @@ public class ProductController {
         return "menuAction";
     }
 
+    @RequestMapping("/")
+    public String mainMenuAfterAuth(Model model) {
+        logger.info("Запрошено меню");
+
+        return "menuAction";
+    }
+
+    @Secured({"ROLE_ADMIN"})
     @RequestMapping(value = "/addProduct", method = RequestMethod.GET)
     public String addProductForm(Model model) {
         Product product = new Product();
@@ -38,6 +46,7 @@ public class ProductController {
         return "addProduct";
     }
 
+    @Secured({"ROLE_ADMIN"})
     @RequestMapping(value = "/addProduct", method = RequestMethod.POST)
     public String addProductResult(@ModelAttribute("product") Product product, Model model) {
         productBase.addProduct(product);
@@ -80,7 +89,7 @@ public class ProductController {
         model.addAttribute("page", page);
         model.addAttribute("ASC", asc);
         model.addAttribute("DESC", desc);
-        model.addAttribute("sortType",sortType);
+        model.addAttribute("sortType", sortType);
         model.addAttribute("pages", new int[pages.getTotalPages()]);
         return "product-list";
     }
@@ -107,6 +116,7 @@ public class ProductController {
         return "message";
     }
 
+    @Secured({"ROLE_ADMIN"})
     @RequestMapping("/deleteProductForm")
     public String deleteProductForm(Model model) {
         Product product = new Product();
@@ -114,6 +124,7 @@ public class ProductController {
         return "deleteProductForm";
     }
 
+    @Secured({"ROLE_ADMIN"})
     @RequestMapping("/delete")
     public String getDeleteMethod(Model model, @PathParam("id") Integer id) {
         logger.info(String.format("Удаляется объект с id [%s]", id));
@@ -126,12 +137,14 @@ public class ProductController {
         return "message";
     }
 
+    @Secured({"ROLE_ADMIN"})
     @RequestMapping("/deleteResult")
     public String showDeleteResult(@ModelAttribute("product") Product product, Model model) {
         logger.info(String.format("Удаляется объект с именем [%s]", product.getTitle()));
         return "redirect:/products/delete/" + product.getId();
     }
 
+    @Secured({"ROLE_ADMIN"})
     @RequestMapping("/updateProduct")
     public String updateProductForm(Model model) {
         Product product = new Product();
@@ -139,6 +152,7 @@ public class ProductController {
         return "updateProduct";
     }
 
+    @Secured({"ROLE_ADMIN"})
     @RequestMapping(value = "/updateProduct", method = RequestMethod.POST)
     public String updateResult(@ModelAttribute("product") Product product, Model model) {
         int result = productBase.addOrUpdate(product);
@@ -156,6 +170,7 @@ public class ProductController {
         return "message";
     }
 
+    @Secured({"ROLE_ADMIN"})
     @RequestMapping("/loadFromFile")
     public String loadDataFromFile(Model model) {
         int result = productBase.loadDataFromFile();

@@ -12,11 +12,11 @@
     <div th:replace="up_menu :: main_menu"></div>
     <div class="action_form">
         <div class="form">
-            <form th:action="@{/products/searchProductForm}" th:object="${product}" method="POST">
+            <form th:action="@{/searchProductForm}" th:object="${product}" method="POST">
                 <h2>Find product by ID:</h2>
                 <div class="mb-3">
                     <label for="id" class="form-label">Product ID:</label>
-                    <input type="number" class="form-control" name="id" th:value="*{id}">
+                    <input type="number" class="form-control" name="id" id="id" th:value="*{id}">
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>

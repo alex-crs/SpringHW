@@ -13,7 +13,7 @@
     <h1 class="title">Product list:</h1>
     <div class="product_blocks">
         <div class="content">
-            <form class="searchInfo" th:action="@{/products/typedProductList}">
+            <form class="searchInfo" th:action="@{/typedProductList}">
                 <div class="mb-3">
                     <label for="MinCost" class="form-label">MinCost:</label>
                     <input type="number" class="form-control" id="MinCost" name="minCost" placeholder="0" th:value="${minCost}" aria-describedby="text">
@@ -54,7 +54,7 @@
                         <td th:text="${product.id}"></td>
                         <td th:text="${product.title}"></td>
                         <td th:text="${product.cost}"></td>
-                        <td><a class="btn btn-danger" th:href="@{/products/delete(id=${product.id})}" role="button">Remove</a>
+                        <td><a class="btn btn-danger" sec:authorize="hasRole('ADMIN')" th:href="@{/delete(id=${product.id})}" role="button">Remove</a>
                         </td>
                     </tr>
                 </tbody>
@@ -68,7 +68,7 @@
         <tr th:each="page, iter: ${pages}">
             <div class="page">
                 <div th:with="page=${iter.count}">
-                    <a th:href="@{/products/typedProductList(page=${page}, minCost=${minCost}, maxCost=${maxCost}, sortType=${sortType})}" th:text="${page}">
+                    <a th:href="@{/typedProductList(page=${page}, minCost=${minCost}, maxCost=${maxCost}, sortType=${sortType})}" th:text="${page}">
                     </a>
                 </div>
             </div>

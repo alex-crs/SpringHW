@@ -4,7 +4,7 @@ import SpringLevel1.entities.Product;
 import SpringLevel1.entities.SearchResult;
 import SpringLevel1.errors.Errors;
 import SpringLevel1.errors.ResourceNotFoundException;
-import SpringLevel1.repositories.ProductDao;
+import SpringLevel1.service.ProductDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;

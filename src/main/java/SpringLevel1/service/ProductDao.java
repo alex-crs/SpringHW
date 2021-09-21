@@ -1,6 +1,7 @@
-package SpringLevel1.repositories;
+package SpringLevel1.service;
 
 import SpringLevel1.entities.Product;
+import SpringLevel1.repositories.ProductRepository;
 import lombok.NoArgsConstructor;
 import org.apache.log4j.Logger;
 import org.hibernate.cfg.Configuration;

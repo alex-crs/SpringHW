@@ -11,7 +11,7 @@
     <div th:replace="up_menu :: main_menu"></div>
     <div class="action_form">
         <div class="form">
-            <form th:action="@{/products/addProduct}" th:object="${product}" method="POST">
+            <form th:action="@{/addProduct}" th:object="${product}" method="POST">
                 <div class="mb-3">
                     <h2>Add product to base</h2>
                     <label for="productName" class="form-label">Product name:</label>

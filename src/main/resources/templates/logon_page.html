@@ -1,0 +1,41 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" th:href="@{/styles/css/style.css}"/>
+</head>
+
+<body>
+<div th:replace="up_menu :: main_menu"></div>
+<div class="action_form">
+    <form th:action="@{/authenticateTheUser}" class="form" method="POST">
+        <div>
+            <div th:if="${param.error} != null">
+                <div class="alert alert-danger col-xs-offset-1 col-xs-10">
+                    Invalid username or password
+                </div>
+            </div>
+            <div th:if="${param.logout} != null">
+                <div class="alert alert-success col-xs-offset-1 col-xs-10">
+                    You have been logged out.
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="username" class="form-label">Login</label>
+            <input type="text" class="form-control" name="username" placeholder="username" id="username" aria-describedby="loginHelp">
+            <div id="loginHelp" class="form-text">Для входа в систему введите логин и пароль.</div>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" name="password" placeholder="password" class="form-control" id="password">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+<div th:replace="foot_menu :: footer"></div>
+</body>
+
+</html>

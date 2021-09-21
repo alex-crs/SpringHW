@@ -12,5 +12,7 @@
         <property name="hbm2ddl.auto">none</property>
         <property name="current_session_context_class">thread</property>
         <mapping class="SpringLevel1.entities.Product"/>
+        <mapping class="SpringLevel1.entities.User"/>
+        <mapping class="SpringLevel1.entities.Role"/>
     </session-factory>
 </hibernate-configuration>

@@ -103,7 +103,7 @@ p.site_info {
     width: 600px;
     margin: 0 auto;
     margin-top: 30px;
-    margin-bottom: 500px;
+    margin-bottom: 100px;
 }
 
 .fixpos {
@@ -111,4 +111,13 @@ p.site_info {
     left: 0;
     bottom: 0;
     width: 100%;
+}
+
+.login {
+    padding: 5px 10px;
+    text-decoration: none;
+    -moz-appearance: button;
+    -webkit-appearance: button;
+    border: 1px #e5d7d7a8 solid;
+    border-radius: 4px;
 }
