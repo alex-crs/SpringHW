@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
-public class SearchResult {
+public class SearchProperties {
     @NonNull
     int[] pages;
     @NonNull
@@ -25,4 +25,6 @@ public class SearchResult {
     long maxCost;
     @NonNull
     String sortType;
+
+
 }

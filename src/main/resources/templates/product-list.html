@@ -46,7 +46,8 @@
                         <th scope="col">ID</th>
                         <th scope="col">Title</th>
                         <th scope="col">Price</th>
-                        <th scope="col">Actions</th>
+                        <th scope="col">To cart</th>
+                        <th sec:authorize="hasRole('ADMIN')" scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -54,6 +55,7 @@
                         <td th:text="${product.id}"></td>
                         <td th:text="${product.title}"></td>
                         <td th:text="${product.cost}"></td>
+                        <td><a class="btn btn-success" th:href="@{/addToCart(id=${product.id})}" role="button">+</a>
                         <td><a class="btn btn-danger" sec:authorize="hasRole('ADMIN')" th:href="@{/delete(id=${product.id})}" role="button">Remove</a>
                         </td>
                     </tr>
