@@ -48,7 +48,7 @@ public class ProductController {
         return "menuAction";
     }
 
-    @Secured({"ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN","ROLE_MANAGER"})
     @RequestMapping(value = "/addProduct", method = RequestMethod.GET)
     public String addProductForm(Model model) {
         Product product = new Product();
@@ -56,7 +56,7 @@ public class ProductController {
         return "addProduct";
     }
 
-    @Secured({"ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN","ROLE_MANAGER"})
     @RequestMapping(value = "/addProduct", method = POST)
     public String addProductResult(@ModelAttribute("product") Product product, Model model) {
         productBase.addProduct(product);
@@ -126,7 +126,7 @@ public class ProductController {
         return "message";
     }
 
-    @Secured({"ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN","ROLE_MANAGER"})
     @RequestMapping("/deleteProductForm")
     public String deleteProductForm(Model model) {
         Product product = new Product();
@@ -134,7 +134,7 @@ public class ProductController {
         return "deleteProductForm";
     }
 
-    @Secured({"ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN","ROLE_MANAGER"})
     @RequestMapping("/delete")
     public String getDeleteMethod(Model model, @PathParam("id") Integer id) {
         logger.info(String.format("Удаляется объект с id [%s]", id));
@@ -147,14 +147,14 @@ public class ProductController {
         return "message";
     }
 
-    @Secured({"ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN","ROLE_MANAGER"})
     @RequestMapping("/deleteResult")
     public String showDeleteResult(@ModelAttribute("product") Product product, Model model) {
         logger.info(String.format("Удаляется объект с именем [%s]", product.getTitle()));
         return "redirect:/delete/" + product.getId();
     }
 
-    @Secured({"ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN","ROLE_MANAGER"})
     @RequestMapping("/updateProduct")
     public String updateProductForm(Model model) {
         Product product = new Product();
@@ -162,7 +162,7 @@ public class ProductController {
         return "updateProduct";
     }
 
-    @Secured({"ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN","ROLE_MANAGER"})
     @RequestMapping(value = "/updateProduct", method = POST)
     public String updateResult(@ModelAttribute("product") Product product, Model model) {
         int result = productBase.addOrUpdate(product);
@@ -180,7 +180,7 @@ public class ProductController {
         return "message";
     }
 
-    @Secured({"ROLE_ADMIN"})
+    @Secured({"ROLE_ADMIN","ROLE_MANAGER"})
     @RequestMapping("/loadFromFile")
     public String loadDataFromFile(Model model) {
         int result = productBase.loadDataFromFile();

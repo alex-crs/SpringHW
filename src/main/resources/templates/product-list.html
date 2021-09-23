@@ -56,7 +56,7 @@
                         <td th:text="${product.title}"></td>
                         <td th:text="${product.cost}"></td>
                         <td><a class="btn btn-success" th:href="@{/addToCart(id=${product.id})}" role="button">+</a>
-                        <td><a class="btn btn-danger" sec:authorize="hasRole('ADMIN')" th:href="@{/delete(id=${product.id})}" role="button">Remove</a>
+                        <td><a class="btn btn-danger" sec:authorize="hasAnyRole('ADMIN','MANAGER')" th:href="@{/delete(id=${product.id})}" role="button">Remove</a>
                         </td>
                     </tr>
                 </tbody>

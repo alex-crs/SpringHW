@@ -22,7 +22,7 @@
             <h3><div sec:authentication="principal.authorities"></div></h3>
         </div>
 
-        <a class="menu_element" href="loadFromFile">Load data from file</a>
+        <a class="menu_element" sec:authorize="hasRole('ADMIN')" href="loadFromFile">Load data from file</a>
     </div>
 
     <div th:replace="foot_menu :: footer"></div>
