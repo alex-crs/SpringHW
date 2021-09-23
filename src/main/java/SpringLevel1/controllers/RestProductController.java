@@ -1,7 +1,7 @@
 package SpringLevel1.controllers;
 
 import SpringLevel1.entities.Product;
-import SpringLevel1.entities.SearchResult;
+import SpringLevel1.entities.SearchProperties;
 import SpringLevel1.errors.Errors;
 import SpringLevel1.errors.ResourceNotFoundException;
 import SpringLevel1.service.ProductDao;
@@ -26,10 +26,10 @@ public class RestProductController {
     private ProductDao productBase;
 
     @GetMapping
-    public SearchResult typeShowProductList(@PathParam("minCost") Long minCost,
-                                            @PathParam("maxCost") Long maxCost,
-                                            @PathParam("sortType") String sortType,
-                                            @RequestParam(value = "page", defaultValue = "1") Integer page) {
+    public SearchProperties typeShowProductList(@PathParam("minCost") Long minCost,
+                                                @PathParam("maxCost") Long maxCost,
+                                                @PathParam("sortType") String sortType,
+                                                @RequestParam(value = "page", defaultValue = "1") Integer page) {
         long minCostDefault = 0l;
         long maxCostDefault = 999999999;
         Page<Product> pages;
@@ -45,7 +45,7 @@ public class RestProductController {
         } else {
             pages = productBase.findCostBetween(minCostDefault, maxCostDefault, Sort.Direction.ASC, --page);
         }
-        return new SearchResult(
+        return new SearchProperties(
                 new int[pages.getTotalPages()],
                 page,
                 pages.stream().collect(Collectors.toList()),
