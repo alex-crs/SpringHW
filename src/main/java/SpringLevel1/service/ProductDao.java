@@ -18,6 +18,7 @@ import java.io.*;
 
 import org.sql2o.Connection;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service("ProductDao")
@@ -40,17 +41,7 @@ public class ProductDao {
     }
 
     public Optional<Product> getProductById(int id) {
-        logger.info("Запрос продукта c ID=" + id);
-        Optional<Product> product = null;
-        try {
-            product = productRepository.findById(id);
-        } catch (Exception e) {
-            logger.info("Продукт не найден");
-        }
-        if (product != null) {
-            logger.info("Получен положительный ответ: " + product);
-        }
-        return product;
+        return productRepository.findById(id);
     }
 
     public void addProduct(Product product) {
@@ -71,6 +62,10 @@ public class ProductDao {
         } else {
             return -1;
         }
+    }
+
+    public List<Product> findProductByTitle(String title){
+        return productRepository.findByTitleContaining(title);
     }
 
     public int deleteById(int id){

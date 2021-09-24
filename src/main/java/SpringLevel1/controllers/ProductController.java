@@ -2,7 +2,7 @@ package SpringLevel1.controllers;
 
 import SpringLevel1.entities.CartElement;
 import SpringLevel1.entities.Product;
-import SpringLevel1.entities.SearchProperties;
+import SpringLevel1.entities.SearchContainer;
 import SpringLevel1.service.ProductDao;
 import SpringLevel1.tools.CartManager;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpRequest;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.websocket.server.PathParam;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -48,7 +49,7 @@ public class ProductController {
         return "menuAction";
     }
 
-    @Secured({"ROLE_ADMIN","ROLE_MANAGER"})
+    @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
     @RequestMapping(value = "/addProduct", method = RequestMethod.GET)
     public String addProductForm(Model model) {
         Product product = new Product();
@@ -56,7 +57,7 @@ public class ProductController {
         return "addProduct";
     }
 
-    @Secured({"ROLE_ADMIN","ROLE_MANAGER"})
+    @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
     @RequestMapping(value = "/addProduct", method = POST)
     public String addProductResult(@ModelAttribute("product") Product product, Model model) {
         productBase.addProduct(product);
@@ -72,15 +73,6 @@ public class ProductController {
         long minCostDefault = 0l;
         long maxCostDefault = 999999999;
         Page<Product> pages;
-        boolean asc = false;
-        boolean desc = false;
-
-        if ("ASC".equals(sortType)) {
-            asc = true;
-        }
-        if ("DESC".equals(sortType)) {
-            desc = true;
-        }
 
         if (minCost != null) {
             minCostDefault = minCost;
@@ -88,7 +80,7 @@ public class ProductController {
         if (maxCost != null) {
             maxCostDefault = maxCost;
         }
-        if (desc) {
+        if ("DESC".equals(sortType)) {
             pages = productBase.findCostBetween(minCostDefault, maxCostDefault, Sort.Direction.DESC, --page);
         } else {
             pages = productBase.findCostBetween(minCostDefault, maxCostDefault, Sort.Direction.ASC, --page);
@@ -97,8 +89,8 @@ public class ProductController {
         model.addAttribute("minCost", minCost);
         model.addAttribute("maxCost", maxCost);
         model.addAttribute("page", page);
-        model.addAttribute("ASC", asc);
-        model.addAttribute("DESC", desc);
+        model.addAttribute("ASC", "ASC".equals(sortType));
+        model.addAttribute("DESC", "DESC".equals(sortType));
         model.addAttribute("sortType", sortType);
         model.addAttribute("pages", new int[pages.getTotalPages()]);
         return "product-list";
@@ -112,21 +104,25 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/searchProductForm", method = POST)
-    public String getFindMethod(Model model, @PathParam("id") Integer id) {
-        Optional<Product> result = productBase.getProductById(id);
-        if (result.isPresent()) {
-            Product product = result.get();
-            model.addAttribute("msg", String.format("Product with id=[%s] found: %s, cost = %s",
-                    product.getId(),
-                    product.getTitle(),
-                    product.getCost()));
+    public String getFindMethod(Model model,
+                                @RequestParam("searchElement") String searchElement,
+                                @RequestParam("searchType") String searchType) {
+        List<Product> result = null;
+        if ("id".equals(searchType)) {
+            result = new ArrayList<>();
+            result.add(productBase.getProductById(Integer.parseInt(searchElement)).get());
         } else {
-            model.addAttribute("msg", "Product with id=" + id + " not found.");
+            result = productBase.findProductByTitle(searchElement);
         }
-        return "message";
+        if (result!=null) {
+            model.addAttribute("products", result);
+        } else {
+            model.addAttribute("msg", "Product: " + searchElement + " not found.");
+        }
+        return "products-found";
     }
 
-    @Secured({"ROLE_ADMIN","ROLE_MANAGER"})
+    @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
     @RequestMapping("/deleteProductForm")
     public String deleteProductForm(Model model) {
         Product product = new Product();
@@ -134,7 +130,7 @@ public class ProductController {
         return "deleteProductForm";
     }
 
-    @Secured({"ROLE_ADMIN","ROLE_MANAGER"})
+    @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
     @RequestMapping("/delete")
     public String getDeleteMethod(Model model, @PathParam("id") Integer id) {
         logger.info(String.format("Удаляется объект с id [%s]", id));
@@ -147,14 +143,14 @@ public class ProductController {
         return "message";
     }
 
-    @Secured({"ROLE_ADMIN","ROLE_MANAGER"})
+    @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
     @RequestMapping("/deleteResult")
     public String showDeleteResult(@ModelAttribute("product") Product product, Model model) {
         logger.info(String.format("Удаляется объект с именем [%s]", product.getTitle()));
         return "redirect:/delete/" + product.getId();
     }
 
-    @Secured({"ROLE_ADMIN","ROLE_MANAGER"})
+    @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
     @RequestMapping("/updateProduct")
     public String updateProductForm(Model model) {
         Product product = new Product();
@@ -162,7 +158,7 @@ public class ProductController {
         return "updateProduct";
     }
 
-    @Secured({"ROLE_ADMIN","ROLE_MANAGER"})
+    @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
     @RequestMapping(value = "/updateProduct", method = POST)
     public String updateResult(@ModelAttribute("product") Product product, Model model) {
         int result = productBase.addOrUpdate(product);
@@ -180,7 +176,7 @@ public class ProductController {
         return "message";
     }
 
-    @Secured({"ROLE_ADMIN","ROLE_MANAGER"})
+    @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
     @RequestMapping("/loadFromFile")
     public String loadDataFromFile(Model model) {
         int result = productBase.loadDataFromFile();
@@ -200,9 +196,18 @@ public class ProductController {
     }
 
     @RequestMapping("/addToCart")
-    public String addToCart(@PathParam("id") int id) {
+    public String addToCart(@PathParam("id") int id, @PathParam("minCost") Long minCost,
+                            @PathParam("maxCost") Long maxCost,
+                            @PathParam("sortType") String sortType,
+                            @RequestParam(value = "page", defaultValue = "1") Integer page, Model model) {
         Optional<Product> product = productBase.getProductById(id);
         product.ifPresent(value -> cartMgr.addToCart(new CartElement().getFromProduct(value)));
+        model.addAttribute("page", page + 1);
+        model.addAttribute("minCost", minCost);
+        model.addAttribute("maxCost", maxCost);
+        model.addAttribute("ASC", "ASC".equals(sortType));
+        model.addAttribute("DESC", "DESC".equals(sortType));
+        model.addAttribute("sortType", sortType);
         return "redirect:/typedProductList";
     }
 

@@ -12,33 +12,6 @@
     <div th:replace="up_menu :: main_menu"></div>
     <h1 class="title">Product list:</h1>
     <div class="product_blocks">
-        <div class="content">
-            <form class="searchInfo" th:action="@{/typedProductList}" th:object="${searchContainer}">
-                <div class="mb-3">
-                    <label for="MinCost" class="form-label">MinCost:</label>
-                    <input type="number" class="form-control" id="MinCost" name="minCost" placeholder="0" th:value="${minCost}" aria-describedby="text">
-                </div>
-                <div class="mb-3">
-                    <label for="MaxCost" class="form-label">MaxCost:</label>
-                    <input type="number" class="form-control" name="maxCost" placeholder="999999999" th:value="${maxCost}" id="MaxCost">
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="sortType" th:value="ASC" th:checked="${ASC}" id="radioButton">
-                    <label class="form-check-label" for="radioButton">
-                    Min cost up
-                </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="sortType" th:value="DESC" th:checked="${DESC}" id="flexRadioDefault2" checked>
-                    <label class="form-check-label" for="flexRadioDefault2">
-                    Max cost up
-                </label>
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
-        </div>
-
-
         <div class="list_item">
             <table class="table">
                 <thead>

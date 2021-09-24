@@ -20,4 +20,6 @@ public interface ProductRepository extends PagingAndSortingRepository<Product, L
     Page<Product> findByCostBetween(long minCost, long maxCost, Pageable pageable);
 
     Product save(Product product);
+
+    List<Product> findByTitleContaining(String title);
 }
