@@ -42,7 +42,7 @@ public class UserService implements UserDetailsService {
     public void addPermissions(int id, String permissions) {
         User user = userRepository.findById(id).get();
         if (user.checkExistRole(permissions) > 0) {
-            Role role = new Role();
+            Role role = roleRepository.findByAuthority(permissions).get();
             role.setAuthority(permissions);
             user.getRoles().add(role);
             userRepository.save(user);
@@ -58,9 +58,8 @@ public class UserService implements UserDetailsService {
         userRepository.deleteById(id);
     }
 
-    public void findRole(int id) {
-        User user = userRepository.findById(id).get();
-
+    public Role findRole(String permission){
+        return roleRepository.findByAuthority(permission).get();
     }
 
     public List<User> findAll() {

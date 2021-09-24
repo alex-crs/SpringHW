@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Найти продукт по ID</title>
+    <title>Найти продукт</title>
     <link type="text/css" rel="stylesheet" th:href="@{/styles/css/style.css}" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 </head>
@@ -12,11 +12,15 @@
     <div th:replace="up_menu :: main_menu"></div>
     <div class="action_form">
         <div class="form">
-            <form th:action="@{/searchProductForm}" th:object="${product}" method="POST">
-                <h2>Find product by ID:</h2>
+            <form th:action="@{/searchProductForm}" method="POST">
                 <div class="mb-3">
-                    <label for="id" class="form-label">Product ID:</label>
-                    <input type="number" class="form-control" name="id" id="id" th:value="*{id}">
+                    <h2>Find Product</h2>
+                    <select class="form-select" id="SearchType" name="searchType">
+                        <option selected></option>
+                        <option th:value="id">Product ID</option>
+                        <option th:value="title">Product title</option>
+                    </select>
+                    <input type="text" class="form-control" name="searchElement" id="searchElement" th:text="*{searchElement}">
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
